@@ -1,0 +1,84 @@
+/* --- OLD FONT SETTINGS (SAVED FOR BACKUP) --- */
+/* @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;700;900&family=Inter:wght@300;400;500;600&display=swap'); */
+
+/* --- NEW FONT SETTINGS --- */
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap');
+@import "tailwindcss";
+
+@font-face {
+  font-family: 'Mango Grotesque';
+  src: url('/fonts/MangoGrotesque/Web-TT/MangoGrotesque-Bold.woff2') format('woff2');
+  font-weight: 700;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'Mango Grotesque';
+  src: url('/fonts/MangoGrotesque/Web-TT/MangoGrotesque-Regular.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+}
+
+@theme {
+  --color-void: #000000;
+  --color-starlight: #ffffff;
+  --color-dust: #e2e8f0;
+  --color-gold: #D4AF37;
+  --color-glass: rgba(255, 255, 255, 0.03);
+  --color-border: rgba(255, 255, 255, 0.1);
+  
+  /* --- OLD VARS --- */
+  /* --font-headline: 'Cinzel', serif; */
+  /* --font-ui: 'Inter', sans-serif; */
+  /* --font-kinetic: 'Inter', sans-serif; */
+  /* --font-mono: 'Inter', monospace; */
+
+  /* --- NEW VARS --- */
+  --font-headline: 'Mango Grotesque', sans-serif;
+  --font-ui: 'Outfit', sans-serif;
+  --font-kinetic: 'Outfit', sans-serif;
+  --font-mono: 'Space Mono', monospace;
+}
+
+@layer base {
+  body {
+    background-color: var(--color-void);
+    color: var(--color-starlight);
+    font-family: var(--font-ui);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    overflow-x: hidden;
+  }
+
+  /* Custom Selection */
+  ::selection {
+    background: var(--color-starlight);
+    color: var(--color-void);
+  }
+}
+
+@layer utilities {
+  .luxury-border {
+    border: 1px solid var(--color-border);
+  }
+  
+  .luxury-glass {
+    background: var(--color-glass);
+    backdrop-filter: blur(12px);
+    border: 1px solid var(--color-border);
+  }
+  
+  .luxury-glass-hover:hover {
+    background: rgba(255, 255, 255, 0.08);
+  }
+}
+
+/* Base structural fixes */
+html {
+  scroll-behavior: smooth;
+}
+html, body, #root {
+  width: 100%;
+  min-height: 100vh;
+  margin: 0;
+  padding: 0;
+}
