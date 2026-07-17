@@ -14,13 +14,14 @@ const formVariants = {
   exit: { opacity: 0, transition: { duration: 0.2 } }
 };
 
-const LuxuryInput = ({ type = "text", placeholder, label, required = true }) => (
+const LuxuryInput = ({ type = "text", name, placeholder, label, required = true }) => (
   <div className="relative mb-8 group w-full">
     <label className="absolute -top-4 left-0 font-[var(--font-ui)] text-[9px] uppercase tracking-[0.2em] text-[var(--color-dust)] group-focus-within:text-[var(--color-gold)] transition-colors">
       {label}
     </label>
     <input 
       type={type}
+      name={name}
       placeholder={placeholder}
       required={required}
       className="w-full bg-transparent border-b border-[var(--color-border)] py-3 px-0 font-[var(--font-ui)] text-sm text-[var(--color-starlight)] focus:outline-none focus:border-[var(--color-gold)] transition-colors placeholder:text-[var(--color-dust)]/30"
@@ -55,6 +56,32 @@ function SuccessMessage() {
 
 export default function WaitlistSystem() {
   const [formSuccess, setFormSuccess] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+    
+    const formData = new FormData(e.target);
+
+    try {
+      // mode: "no-cors" is required to prevent Google's strict CORS policy from blocking the POST.
+      // Note: Because it is no-cors, the response will be "opaque" (we can't read the success JSON),
+      // so if it doesn't throw a network error, we assume it was successfully received.
+      await fetch(import.meta.env.VITE_GOOGLE_SHEETS_URL, {
+        method: "POST",
+        body: formData,
+        mode: "no-cors"
+      });
+
+      setFormSuccess(true);
+    } catch (error) {
+      console.error(error);
+      alert("Transmission failed. Check network connection.");
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
 
   return (
     <section id="waitlist" className="w-full flex justify-center px-6 py-24 bg-transparent">
@@ -100,21 +127,21 @@ export default function WaitlistSystem() {
                 
                 <form 
                   className="flex flex-col w-full"
-                  onSubmit={(e) => { e.preventDefault(); setFormSuccess(true); }}
+                  onSubmit={handleSubmit}
                 >
                   <div className="flex flex-col md:flex-row md:space-x-8 w-full">
-                    <LuxuryInput label="Full Name" placeholder="e.g., Galileo Galilei" />
-                    <LuxuryInput label="Target Location / City" placeholder="e.g., Dharamshala, HP" />
+                    <LuxuryInput name="name" label="Full Name" placeholder="e.g., Galileo Galilei" />
+                    <LuxuryInput name="location" label="Target Location / City" placeholder="e.g., Dharamshala, HP" />
                   </div>
                   
-                  <LuxuryInput label="Contact Email" type="email" placeholder="observer@example.com" />
+                  <LuxuryInput name="email" label="Contact Email" type="email" placeholder="observer@example.com" />
 
                   <p className="font-[var(--font-ui)] text-[10px] text-[var(--color-dust)]/70 mt-2 mb-8">
                     * By subscribing, you agree to our Privacy Policy. We do not sell data.
                   </p>
                   
-                  <button type="submit" className="luxury-border px-8 py-4 rounded-none font-[var(--font-ui)] uppercase tracking-[0.2em] text-[10px] text-[var(--color-starlight)] hover:bg-[var(--color-starlight)] hover:text-[var(--color-void)] transition-all duration-500 w-full sm:w-auto self-start">
-                    Submit Coordinates
+                  <button disabled={isSubmitting} type="submit" className="luxury-border px-8 py-4 rounded-none font-[var(--font-ui)] uppercase tracking-[0.2em] text-[10px] text-[var(--color-starlight)] hover:bg-[var(--color-starlight)] hover:text-[var(--color-void)] transition-all duration-500 w-full sm:w-auto self-start disabled:opacity-50 disabled:cursor-not-allowed">
+                    {isSubmitting ? "Transmitting..." : "Submit Coordinates"}
                   </button>
                 </form>
               </motion.div>
