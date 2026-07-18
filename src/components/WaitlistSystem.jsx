@@ -56,12 +56,12 @@ function SuccessMessage() {
       </motion.div>
 
       {/* Terminal Typing Effect for Title */}
-      <div className="overflow-hidden mb-4 h-[40px] flex items-center">
+      <div className="overflow-hidden mb-4 min-h-[60px] flex items-center justify-center text-center w-full">
         <motion.h3 
-          initial={{ y: 40, opacity: 0 }}
+          initial={{ y: 50, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
           transition={{ duration: 0.6, ease: "easeOut", delay: 1.2 }}
-          className="font-[var(--font-mono)] uppercase text-2xl tracking-[0.2em] text-[var(--color-starlight)]"
+          className="font-[var(--font-mono)] uppercase text-xl sm:text-2xl tracking-[0.1em] sm:tracking-[0.2em] text-[var(--color-starlight)]"
         >
           Coordinates <span className="text-[var(--color-gold)]">Locked</span>
         </motion.h3>
@@ -76,10 +76,6 @@ function SuccessMessage() {
         <p className="font-[var(--font-ui)] text-[var(--color-dust)] text-[13px] max-w-sm mb-6 leading-loose">
           Connection established. You are officially on the First Light routing matrix.
         </p>
-        <div className="flex gap-4">
-          <span className="font-[var(--font-mono)] text-[9px] text-[var(--color-dust)]/70 tracking-widest border border-[var(--color-dust)]/20 px-3 py-1 bg-black/40">STATUS: ACTIVE</span>
-          <span className="font-[var(--font-mono)] text-[9px] text-[var(--color-dust)]/70 tracking-widest border border-[var(--color-dust)]/20 px-3 py-1 bg-black/40">SECURE: 256-BIT</span>
-        </div>
       </motion.div>
     </motion.div>
   );
