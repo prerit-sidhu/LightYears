@@ -38,7 +38,7 @@ export default function Nav() {
       animate={hidden ? "hidden" : "visible"}
       transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
     >
-      <div className="max-w-7xl mx-auto px-8">
+      <div className="max-w-7xl mx-auto px-4 sm:px-8">
         {/* Dynamic padding: taller at the top, shorter when floating */}
         <div className={`flex items-center justify-between transition-all duration-700 ease-out ${isTop ? 'py-8' : 'py-4'}`}>
           
@@ -48,9 +48,9 @@ export default function Nav() {
             transition={{ duration: 1, delay: 1.8, ease: "easeOut" }}
             className="flex items-center"
           >
-            <Link to="/" className="flex items-center gap-4">
-              <img src="/Logo.png" alt="LightYears" className="h-8 md:h-10 w-auto object-contain" />
-              <span className="font-[var(--font-headline)] font-normal text-2xl tracking-[0.2em] text-[var(--color-starlight)] mt-1">
+            <Link to="/" className="flex items-center gap-2 sm:gap-4">
+              <img src="/Logo.png" alt="LightYears" className="h-6 sm:h-8 md:h-10 w-auto object-contain" />
+              <span className="font-[var(--font-headline)] font-normal text-base sm:text-xl md:text-2xl tracking-[0.1em] sm:tracking-[0.2em] text-[var(--color-starlight)] mt-1">
                 LIGHTYEARS<span className="text-[var(--color-gold)]">.</span>
               </span>
             </Link>
@@ -83,7 +83,7 @@ export default function Nav() {
             transition={{ duration: 1, delay: 1.8, ease: "easeOut" }}
             className="flex items-center"
           >
-            <Link to="/reserve" className="luxury-border px-8 py-3 rounded-none font-[var(--font-ui)] uppercase tracking-[0.2em] text-[10px] text-[var(--color-starlight)] hover:bg-[var(--color-starlight)] hover:text-[var(--color-void)] transition-all duration-500 relative overflow-hidden group">
+            <Link to="/reserve" className="luxury-border px-4 sm:px-8 py-2 sm:py-3 rounded-none font-[var(--font-ui)] uppercase tracking-[0.2em] text-[9px] sm:text-[10px] text-[var(--color-starlight)] hover:bg-[var(--color-starlight)] hover:text-[var(--color-void)] transition-all duration-500 relative overflow-hidden group">
               <span className="relative z-10">Reserve</span>
             </Link>
           </motion.div>

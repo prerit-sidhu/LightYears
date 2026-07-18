@@ -34,7 +34,7 @@ export default function DarkSkyCatalog() {
       </div>
 
       {/* Accordion Container */}
-      <div className="w-[95%] max-w-7xl h-[75vh] md:h-[65vh] flex gap-2 overflow-hidden px-2 md:px-0">
+      <div className="w-[95%] max-w-7xl h-[80vh] md:h-[65vh] flex flex-col md:flex-row gap-2 overflow-hidden px-2 md:px-0">
         {catalogItems.map((item) => {
           const isActive = activeId === item.id;
           
@@ -63,12 +63,13 @@ export default function DarkSkyCatalog() {
                 isActive ? 'from-black/90 via-black/40 to-black/10' : 'from-black/80 via-black/60 to-black/40'
               }`} />
 
-              {/* Inactive State: Vertical Text (Replaced long names with short TGT IDs) */}
-              <div className={`absolute inset-0 flex flex-col justify-end items-center pb-8 transition-opacity duration-500 ${isActive ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}>
-                <div className="w-[1px] h-12 bg-[var(--color-gold)]/40 mb-6"></div>
-                <span className="font-[var(--font-mono)] text-[10px] text-[var(--color-gold)] opacity-70 -rotate-90 whitespace-nowrap transform origin-bottom tracking-[0.2em]">
+              {/* Inactive State: Vertical Text on Desktop, Horizontal on Mobile */}
+              <div className={`absolute inset-0 flex flex-row md:flex-col justify-start md:justify-end items-center pl-6 md:pl-0 md:pb-8 transition-opacity duration-500 ${isActive ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}>
+                <div className="hidden md:block w-[1px] h-12 bg-[var(--color-gold)]/40 mb-6"></div>
+                <span className="font-[var(--font-mono)] text-[10px] text-[var(--color-gold)] opacity-70 md:-rotate-90 whitespace-nowrap transform md:origin-bottom tracking-[0.2em]">
                   TGT-{String(item.id).padStart(2, '0')}
                 </span>
+                <div className="md:hidden w-12 h-[1px] bg-[var(--color-gold)]/40 ml-4"></div>
               </div>
 
               {/* Active State: Full Telemetry HUD */}
