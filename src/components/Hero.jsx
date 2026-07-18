@@ -138,7 +138,7 @@ export default function Hero() {
           variants={fadeUpVariants}
           className="flex flex-col sm:flex-row items-center gap-10"
         >
-          <Link to="/reserve" className="luxury-glass luxury-glass-hover group font-[var(--font-ui)] uppercase text-[11px] tracking-[0.3em] text-[var(--color-starlight)] px-[40px] py-[20px] rounded-none transition-all duration-500 flex items-center gap-4 border border-[var(--color-border)] hover:border-[var(--color-gold)]">
+          <Link to="/partner" className="luxury-glass luxury-glass-hover group font-[var(--font-ui)] uppercase text-[11px] tracking-[0.3em] text-[var(--color-starlight)] px-[40px] py-[20px] rounded-none transition-all duration-500 flex items-center gap-4 border border-[var(--color-border)] hover:border-[var(--color-gold)]">
             Partner With Us <ArrowRight size={14} className="opacity-50 group-hover:opacity-100 transition-opacity text-[var(--color-gold)]" />
           </Link>
           

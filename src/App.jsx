@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
+import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom'
 import { useProgress } from '@react-three/drei'
 import Nav from './components/Nav'
 import Footer from './components/Footer'
@@ -8,8 +8,17 @@ import LoadingScreen from './components/LoadingScreen'
 
 import Home from './pages/Home'
 import Reserve from './pages/Reserve'
+import Partner from './pages/Partner'
 import Privacy from './pages/Privacy'
 import Terms from './pages/Terms'
+
+function ScrollToTop() {
+  const { pathname } = useLocation();
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [pathname]);
+  return null;
+}
 
 function App() {
   const { active } = useProgress()
@@ -26,6 +35,7 @@ function App() {
 
   return (
     <Router>
+      <ScrollToTop />
       <div className="w-full min-h-screen bg-transparent font-[var(--font-ui)] text-[var(--color-starlight)] relative selection:bg-[var(--color-pulsar)] selection:text-[var(--color-void)]">
         
         {/* Deep Space Background Image specifically for Hero */}
@@ -61,6 +71,7 @@ function App() {
             <Routes>
               <Route path="/" element={<Home />} />
               <Route path="/reserve" element={<Reserve />} />
+              <Route path="/partner" element={<Partner />} />
               <Route path="/privacy" element={<Privacy />} />
               <Route path="/terms" element={<Terms />} />
             </Routes>

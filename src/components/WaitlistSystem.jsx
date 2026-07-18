@@ -1,6 +1,7 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { CheckCircle2 } from 'lucide-react';
+import { Link } from 'react-router-dom';
 
 const formVariants = {
   hidden: { opacity: 0 },
@@ -32,24 +33,54 @@ const LuxuryInput = ({ type = "text", name, placeholder, label, required = true 
 function SuccessMessage() {
   return (
     <motion.div 
-      initial={{ opacity: 0, scale: 0.9 }}
-      animate={{ opacity: 1, scale: 1 }}
-      className="h-full flex flex-col items-center justify-center text-center py-12"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      className="h-full flex flex-col items-center justify-center text-center py-12 relative"
     >
-      <motion.div 
-        initial={{ pathLength: 0 }}
-        animate={{ pathLength: 1 }}
-        transition={{ duration: 1, ease: "easeOut" }}
-        className="mb-8 text-[var(--color-pulsar)]"
-      >
-        <CheckCircle2 size={64} strokeWidth={1.5} />
+      {/* Crosshair to Checkmark Animation Sequence */}
+      <motion.div className="relative z-10 mb-8 flex items-center justify-center w-24 h-24">
+        <motion.div
+          initial={{ rotate: -90, scale: 2, opacity: 0 }}
+          animate={{ rotate: 0, scale: 1, opacity: 1 }}
+          transition={{ duration: 0.8, ease: "circOut" }}
+          className="absolute inset-0 border border-[var(--color-gold)]/30 rounded-full"
+        />
+        <motion.div 
+          initial={{ pathLength: 0, opacity: 0 }}
+          animate={{ pathLength: 1, opacity: 1 }}
+          transition={{ duration: 1, ease: "easeOut", delay: 0.8 }}
+          className="text-[var(--color-gold)] drop-shadow-[0_0_15px_rgba(212,175,55,0.6)]"
+        >
+          <CheckCircle2 size={56} strokeWidth={1} />
+        </motion.div>
       </motion.div>
-      <h3 className="font-[var(--font-headline)] italic text-4xl text-[var(--color-starlight)] mb-4">
-        Coordinates Locked.
-      </h3>
-      <p className="font-[var(--font-ui)] text-[var(--color-dust)] max-w-sm">
-        You are officially on the First Light waitlist. We will notify you the moment our operations go live in your sector.
-      </p>
+
+      {/* Terminal Typing Effect for Title */}
+      <div className="overflow-hidden mb-4 h-[40px] flex items-center">
+        <motion.h3 
+          initial={{ y: 40, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          transition={{ duration: 0.6, ease: "easeOut", delay: 1.2 }}
+          className="font-[var(--font-mono)] uppercase text-2xl tracking-[0.2em] text-[var(--color-starlight)]"
+        >
+          Coordinates <span className="text-[var(--color-gold)]">Locked</span>
+        </motion.h3>
+      </div>
+
+      <motion.div
+        initial={{ opacity: 0, y: 10 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.8, delay: 2 }}
+        className="flex flex-col items-center relative z-10"
+      >
+        <p className="font-[var(--font-ui)] text-[var(--color-dust)] text-[13px] max-w-sm mb-6 leading-loose">
+          Connection established. You are officially on the First Light routing matrix.
+        </p>
+        <div className="flex gap-4">
+          <span className="font-[var(--font-mono)] text-[9px] text-[var(--color-dust)]/70 tracking-widest border border-[var(--color-dust)]/20 px-3 py-1 bg-black/40">STATUS: ACTIVE</span>
+          <span className="font-[var(--font-mono)] text-[9px] text-[var(--color-dust)]/70 tracking-widest border border-[var(--color-dust)]/20 px-3 py-1 bg-black/40">SECURE: 256-BIT</span>
+        </div>
+      </motion.div>
     </motion.div>
   );
 }
@@ -57,27 +88,44 @@ function SuccessMessage() {
 export default function WaitlistSystem() {
   const [formSuccess, setFormSuccess] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [formError, setFormError] = useState("");
+
+  // Check local storage to prevent duplicate submissions on the same browser
+  useEffect(() => {
+    if (localStorage.getItem('lightyears_waitlist_submitted') === 'true') {
+      setFormSuccess(true);
+    }
+  }, []);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setFormError("");
     setIsSubmitting(true);
     
+    // Using URLSearchParams prevents CORS preflight errors with Google Apps Script
+    // and allows us to read the JSON response (to check for duplicates)
     const formData = new FormData(e.target);
+    const data = new URLSearchParams(formData);
 
     try {
-      // mode: "no-cors" is required to prevent Google's strict CORS policy from blocking the POST.
-      // Note: Because it is no-cors, the response will be "opaque" (we can't read the success JSON),
-      // so if it doesn't throw a network error, we assume it was successfully received.
-      await fetch(import.meta.env.VITE_GOOGLE_SHEETS_URL, {
+      const response = await fetch(import.meta.env.VITE_GOOGLE_SHEETS_URL, {
         method: "POST",
-        body: formData,
-        mode: "no-cors"
+        body: data
       });
+      
+      const result = await response.json();
 
-      setFormSuccess(true);
+      if (result.result === "success") {
+        localStorage.setItem('lightyears_waitlist_submitted', 'true');
+        setFormSuccess(true);
+      } else if (result.message === "duplicate") {
+        setFormError("This email is already on the First Light routing matrix.");
+      } else {
+        setFormError("Failed to lock coordinates. Please try again.");
+      }
     } catch (error) {
       console.error(error);
-      alert("Transmission failed. Check network connection.");
+      setFormError("Transmission failed. Check network connection.");
     } finally {
       setIsSubmitting(false);
     }
@@ -139,10 +187,30 @@ export default function WaitlistSystem() {
                   <p className="font-[var(--font-ui)] text-[10px] text-[var(--color-dust)]/70 mt-2 mb-8">
                     * By subscribing, you agree to our Privacy Policy. We do not sell data.
                   </p>
-                  
-                  <button disabled={isSubmitting} type="submit" className="luxury-border px-8 py-4 rounded-none font-[var(--font-ui)] uppercase tracking-[0.2em] text-[10px] text-[var(--color-starlight)] hover:bg-[var(--color-starlight)] hover:text-[var(--color-void)] transition-all duration-500 w-full sm:w-auto self-start disabled:opacity-50 disabled:cursor-not-allowed">
-                    {isSubmitting ? "Transmitting..." : "Submit Coordinates"}
-                  </button>
+
+                  <AnimatePresence>
+                    {formError && (
+                      <motion.div
+                        initial={{ opacity: 0, y: -10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0 }}
+                        className="mb-8 p-4 border border-red-500/30 bg-red-500/10 text-red-400 font-[var(--font-mono)] text-[10px] tracking-widest uppercase flex items-center gap-4"
+                      >
+                        <span className="w-1.5 h-1.5 rounded-full bg-red-500 animate-pulse" />
+                        {formError}
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-6 w-full mt-2">
+                    <button disabled={isSubmitting} type="submit" className="luxury-border px-8 py-4 rounded-none font-[var(--font-ui)] uppercase tracking-[0.2em] text-[10px] text-[var(--color-starlight)] hover:bg-[var(--color-starlight)] hover:text-[var(--color-void)] transition-all duration-500 w-full sm:w-auto self-start disabled:opacity-50 disabled:cursor-not-allowed">
+                      {isSubmitting ? "Transmitting..." : "Submit Coordinates"}
+                    </button>
+                    
+                    <Link to="/partner" className="font-[var(--font-ui)] text-[11px] text-[var(--color-dust)] hover:text-[var(--color-gold)] transition-colors text-center sm:text-right group">
+                      Commercial or Hospitality property?<br/>
+                      <span className="border-b border-[var(--color-gold)]/30 group-hover:border-[var(--color-gold)] pb-0.5">Initialize B2B Protocol &rarr;</span>
+                    </Link>
+                  </div>
                 </form>
               </motion.div>
             ) : (

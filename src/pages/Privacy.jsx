@@ -78,7 +78,7 @@ export default function Privacy() {
               <h2 className="text-xl text-[var(--color-starlight)] mb-4">5. Contact Us for Privacy Concerns</h2>
               <p>
                 If you wish to view, correct, or request the deletion of your personal data, please contact our Grievance Officer at:<br/>
-                <strong className="text-[var(--color-starlight)]">Email:</strong> support@lightyears.com
+                <strong className="text-[var(--color-starlight)]">Email:</strong> support@joinlightyears.in
               </p>
             </section>
 

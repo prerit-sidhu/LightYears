@@ -32,7 +32,7 @@ export default function Footer() {
               We engineer zero-overhead astronomical experiences for premium residencies. By seamlessly integrating precision optics with expert logistical execution, we bring the deepest corners of the universe directly to your guests.
             </p>
             <Link 
-              to="/reserve"
+              to="/partner"
               className="font-[var(--font-mono)] text-[10px] uppercase tracking-[0.2em] text-[var(--color-gold)] hover:text-[var(--color-starlight)] transition-colors duration-300 pb-2 border-b border-[var(--color-gold)]/40 hover:border-[var(--color-starlight)] flex items-center gap-3"
             >
               Initiate Partnership 
@@ -81,7 +81,7 @@ export default function Footer() {
                 const isPrivacy = item === 'Privacy Policy';
                 const isTerms = item === 'Terms of Service';
                 const isContact = item === 'Contact Operations';
-                const linkDest = isPrivacy ? '/privacy' : isTerms ? '/terms' : isContact ? 'mailto:support@lightyears.com' : '#';
+                const linkDest = isPrivacy ? '/privacy' : isTerms ? '/terms' : isContact ? 'mailto:support@joinlightyears.in' : '#';
                 
                 return (
                   <li key={item}>
