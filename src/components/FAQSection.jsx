@@ -20,7 +20,7 @@ const FAQS = [
   },
   {
     question: 'Is the equipment easily portable?',
-    answer: 'Yes. Engineered for absolute mobility. The entire optical assembly is securely packed into a ruggedized, custom-fitted carrying system under 6kg.'
+    answer: 'Yes. Engineered for mobility. The optical assembly is securely packed into a ruggedized, custom-fitted carrying system. Weights vary from 6kg up to 25kg, depending on the specific optical power and aperture size of the telescope deployed.'
   },
   {
     question: 'How long does a typical session last?',
